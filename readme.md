@@ -1,1 +1,1 @@
-repositório para estudo das linguagens C / C++ / Arduino
+repositório para estudo das linguagens C / C++ / Arduino.
