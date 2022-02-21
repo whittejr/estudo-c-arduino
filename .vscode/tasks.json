@@ -7,7 +7,8 @@
 			"command": "C:\\MinGW\\bin\\cpp.exe",
 			"args": [
 				"-fdiagnostics-color=always",
-				"-g",
+				"-g3",
+				"-Wall",
 				"${file}",
 				"-o",
 				"${fileDirname}\\${fileBasenameNoExtension}.exe"
@@ -22,6 +23,19 @@
 				"kind": "build",
 				"isDefault": true
 			},
+			"detail": "compilador: C:\\MinGW\\bin\\cpp.exe"
+		},
+		
+		{
+			"type": "shell",
+			"label": "Run this C Program",
+			"command": "C:\\MinGW\\bin\\cpp.exe -g3 -Wall \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" &&\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
 			"detail": "compilador: C:\\MinGW\\bin\\cpp.exe"
 		}
 	]

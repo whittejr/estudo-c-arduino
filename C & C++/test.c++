@@ -1,16 +1,20 @@
 #include <stdio.h>
 
-int a = 0;
-int main(void)
+int main()
 {
-    printf("Digite o tamanho da piramide: ");
+   int n;
+   
+   do
+   {
+       
+        printf("Altura: ");
+        scanf("%d", &n);
+   }
+    while(n < 1);
     
-    do
+    for(int i = 0; i < n; i++)
     {
-        scanf("%d", a);
-    } while (a < 1 || a > 8);
-    
-    
-    printf("O valor e %d", a);
-  
+        printf("?");
+    }
+    printf("\n");
 }
