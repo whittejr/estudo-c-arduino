@@ -3,8 +3,8 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "C/C++: cpp.exe arquivo de build ativo",
-			"command": "C:\\MinGW\\bin\\cpp.exe",
+			"label": "C/C++: gcc.exe arquivo de build ativo",
+			"command": "C:\\MinGW\\bin\\gcc.exe",
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g3",
@@ -23,20 +23,20 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"detail": "compilador: C:\\MinGW\\bin\\cpp.exe"
+			"detail": "compilador: C:\\MinGW\\bin\\gcc.exe"
 		},
 		
 		{
 			"type": "shell",
 			"label": "Run this C Program",
-			"command": "C:\\MinGW\\bin\\cpp.exe -g3 -Wall \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" ;\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
+			"command": "C:\\MinGW\\bin\\gcc.exe -g3 -Wall \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" &&\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
 			"options": {
 				"cwd": "${fileDirname}"
 			},
 			"problemMatcher": [
 				"$gcc"
 			],
-			"detail": "compilador: C:\\MinGW\\bin\\cpp.exe"
+			"detail": "compilador: C:\\MinGW\\bin\\gcc.exe"
 		}
 	]
 }
