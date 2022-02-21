@@ -29,7 +29,7 @@
 		{
 			"type": "shell",
 			"label": "Run this C Program",
-			"command": "C:\\MinGW\\bin\\cpp.exe -g3 -Wall \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" &&\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
+			"command": "C:\\MinGW\\bin\\cpp.exe -g3 -Wall \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" ;\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
 			"options": {
 				"cwd": "${fileDirname}"
 			},
