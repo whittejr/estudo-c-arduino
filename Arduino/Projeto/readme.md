@@ -1,7 +1,7 @@
 Projeto Segurança Patrimonial
 
 
-leds vermelho e verde para confirmação da senha
+leds vermelho e verde para confirmação da senha / azul para RFID
 menu para o projeto (switch case)
 menus e submenus [Acesso]       -> [Inserir Senha] -> [Senha>] 
                  [Trocar Senha]    [Cartão]           [Trocar Senha](A)
