@@ -53,7 +53,7 @@ void loop(){
     Serial.print(senha);
     cont=0;
       
-      if(senha == "4321"){
+      if(senha == "1234"){
       lcd.clear();
       lcd.setCursor (0,0);
       lcd.write("Senha correta");

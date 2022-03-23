@@ -36,6 +36,7 @@ void setup()
     delay(500);
     //senha = "";
   
+  
 }
 
 void loop()
@@ -50,8 +51,7 @@ void loop()
     delay(4000);
  
     char key = myKeypad.getKey();
-  
-    if (key != NO_KEY)
+  if (key != NO_KEY)
     {
 
         Serial.println(key);
@@ -60,4 +60,5 @@ void loop()
         senha = senha + key;
         cont++;
     }
+    
 }
