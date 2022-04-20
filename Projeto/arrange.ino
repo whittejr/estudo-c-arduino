@@ -37,8 +37,8 @@ char keys [LINHAS] [COLUNAS] =
   {'*','0','#','D'}
 };
 
-byte rowPins[LINHAS] = {A1, A0, 11, 10};
-byte colPins[COLUNAS] = {9, 8, 7, 6};
+byte rowPins[LINHAS] = {22, 23, 24, 25};
+byte colPins[COLUNAS] = {26, 27, 28, 29};
 
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, LINHAS, COLUNAS);
 
@@ -53,11 +53,10 @@ void setup()
     lcd.begin(16, 2);
     lcd.clear();
 
-      lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("A - Inserir senha");
-  lcd.setCursor(0,1);
-  lcd.print("B - Trocar senha");
+    //lcd.setCursor(0,0);
+    //lcd.print("A - Inserir senha");
+    //lcd.setCursor(0,1);
+    //lcd.print("B - Trocar senha");
   
     //timer();
     //lcd.setCursor(0,0);
@@ -68,7 +67,7 @@ void setup()
   
 void loop()
 {
-    lcd.clear();
+ 
     lcd.setCursor(0,0);
     lcd.print("A - Inserir senha");
     lcd.setCursor(0,1);
@@ -76,17 +75,21 @@ void loop()
 
     keypressed = myKeypad.getKey();
 
-    if (keypressed == 'B')
+    if (keypressed =='A')
     {
-        lcd.clear();
-        int i=1;
-        tempPassword = "";
-        lcd.setCursor(0,0);
-        lcd.print("Senha Atual");
-        lcd.setCursor(0,1);
-        lcd.print(">");
-        passChangeMode = true;
-        passChanged = true;
+        void enterPassword();
+    }
+    else if (keypressed == 'B')
+    {
+    lcd.clear();
+    int i=1;
+    tempPassword = "";
+    lcd.setCursor(0,0);
+    lcd.print("Senha Atual");
+    lcd.setCursor(0,1);
+    lcd.print(">");
+    passChangeMode = true;
+    passChanged = true;
       
         while(passChanged)
         {    
@@ -146,7 +149,7 @@ void loop()
                             tone(buzzer, 2000, 100);
                             lcd.clear();
                             lcd.setCursor(0,0);
-                            lcd.print("Set New Password");
+                            lcd.print("Nova Senha");
                             lcd.setCursor(0,1);
                             lcd.print(">");
                         }
