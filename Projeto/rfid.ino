@@ -7,10 +7,10 @@
 #define RST_PIN         5
 #define SS_PIN          53
 MFRC522 mfrc522(SS_PIN, RST_PIN);
-String tagUID[0] ={"7 133 36 63"};
+String tagUID[1] ={"07 85 24 3F"};
 
 //senha
-String senha="1234";
+String senha = "1234";
 String tempSenha;
 
 boolean passChangeMode = false;
@@ -46,7 +46,7 @@ void timer();
 void setup()
 {
     Serial.begin(9600);
-    mfrc522.PCD_Init();   // Init MFRC522
+    mfrc522.PCD_Init();
     SPI.begin();
   
     analogWrite(6,Contrast);
@@ -69,7 +69,7 @@ void setup()
 void loop()
 {
     lcd.setCursor(0,0);
-    lcd.print("A - Inserir senha");
+    lcd.print("A - Acesso");
     lcd.setCursor(0,1);
     lcd.print("B - Trocar senha");
     
@@ -128,24 +128,43 @@ void loop()
                         lcd.print("Wrong! Try Again");
                         delay(3000);
                         lcd.setCursor(0,0);
-                        lcd.print(" *** ALARM *** ");
+                        lcd.print(" *** ACESSO *** ");
                         lcd.setCursor(0,1);
                         lcd.print(">");
                         lcd.clear();
                         cont++;
                     }
-                    else
+                    else if (tempSenha != senha)
                     {
-                        lcd.clear();
-                        lcd.home();
-                        lcd.print("Limite Atingido.");
-                        delay(3000);
-                        activated = 0;
+                        if (cont != 2)
+                        {
+                            lcd.clear();
+                            lcd.setCursor(0,0);
+                            lcd.print("Tente Novamente");
+                            delay(2000);
+                            lcd.setCursor(0,0);
+                            lcd.print(" *** ACESSO *** ");
+                            lcd.setCursor(0,1);
+                            lcd.print(">");
+                            cont++;
+                            
+                            tempSenha = "";
+                            k = 1;
+                        }
+                        else
+                        {
+                            lcd.clear();
+                            lcd.home();
+                            lcd.print("Limite Atingido.");
+                            delay(3000);
+                            //timer();
+                            rfid_func();
+                        }                           
                     }
                 }
             }
         }
-    }   
+    } 
     else if (keypressed == 'B')
     {
         lcd.clear();
@@ -176,7 +195,7 @@ void loop()
             if (i > 5 || keypressed == '#')
             {
                 tempSenha = "";
-                i=1;
+                i = 1;
                 lcd.clear();
                 lcd.setCursor(0,0);
                 lcd.print("Senha Atual");
@@ -185,7 +204,7 @@ void loop()
             }
             if ( keypressed == '*')
             {
-                i=1;
+                i = 1;
 
                 if (senha == tempSenha)
                 {
@@ -214,7 +233,7 @@ void loop()
                         if (i > 5 || keypressed == '#')
                         {
                             tempSenha = keypressed - 1;
-                            i=1;
+                            i = 1;
                             lcd.clear();
                             lcd.setCursor(0,0);
                             lcd.print("Nova Senha");
@@ -223,7 +242,7 @@ void loop()
                         }
                         if ( keypressed == '*')
                         {
-                            i=1;
+                            i = 1;
                             senha = tempSenha;
                             passChangeMode = false;
                             passChanged = false;
@@ -237,14 +256,14 @@ void loop()
 
 void enterPassword()
 {
-    int k=5;
+    int k=1;
     tempSenha = "";
     activated = true;
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(" *** ALARM *** ");
     lcd.setCursor(0,1);
-    lcd.print("Pass>");
+    lcd.print(">");
     
     while(activated)
     {
@@ -267,89 +286,45 @@ void enterPassword()
             k=5;
             lcd.clear();
             lcd.setCursor(0,0);
-            lcd.print(" *** ALARM *** ");
+            lcd.print(" *** ACESSO *** ");
             lcd.setCursor(0,1);
             lcd.print("Pass>");
         }
-        if ( keypressed == '*')
-        {
-            if ( tempSenha == senha )
+        if (keypressed == '*')
             {
-                lcd.clear();
-                lcd.setCursor(0,0);
-                lcd.print("Access Granted!");
-                delay(3000);
-                loop();
-            }
-            else if (tempSenha != senha)
-            {
-                if (cont != maxCont)
+                if (tempSenha == senha)
                 {
-                    lcd.setCursor(0,1);
-                    lcd.print("Wrong! Try Again");
-                    delay(3000);
                     lcd.clear();
-                    cont++;
-                }
-            lcd.clear();
-            lcd.home();
-            lcd.print("Limite Atingido.");
-            delay(3000);
-            timer();
-
-            if (!mfrc522.PICC_IsNewCardPresent()) 
-            {
-                return;
-            }
-            //Seleciona o cartão / tag
-            if (!mfrc522.PICC_ReadCardSerial()) 
-            {
-                return;
-            }
-                
-            String conteudo= "";
-            byte letra;
-
-            for (byte i = 0; i < mfrc522.uid.size; i++) 
-            {
-                Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-                Serial.print(mfrc522.uid.uidByte[i], HEX);
-                conteudo.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-                conteudo.concat(String(mfrc522.uid.uidByte[i], HEX));
-            }
-  
-            boolean tagVerificada = false;
-            lcd.clear();
-            lcd.home();
-            conteudo.toUpperCase();
-  
-            for(int indice = 0; indice < sizeof(tagUID); indice++)
-            {
-                if (conteudo.substring(1) == tagUID[0]) //UID 1
-                {
-                    lcd.print("Ola!");
-                    lcd.setCursor(0,1);
-                    lcd.println("Acesso Liberado!");
-    
-                    //tag encontrada
-                    tagVerificada = true;
-
+                    lcd.setCursor(0,0);
+                    lcd.print("Access Granted!");
                     delay(3000);
-                    conteudo= "";
-                }
-            }
-    
-                if((tagVerificada == false) && (conteudo != ""))
-                {
-    
-                    lcd.print("Usuario desconhecido!");
-                    lcd.setCursor(0,1);
-                    lcd.println("Acesso negado!");
-    
-                    delay(3000);  
                     activated = 0;
-                    conteudo = "";
                 }
+                else if (tempSenha != senha)
+                {
+                    if (cont != 2)
+                    {
+                        lcd.clear();
+                        lcd.setCursor(0,0);
+                        lcd.print("Tente Novamente");
+                        delay(2000);
+                        lcd.setCursor(0,0);
+                        lcd.print(" *** ACESSO *** ");
+                        lcd.setCursor(0,1);
+                        lcd.print(">");
+                        cont++;
+                        
+                        tempSenha = "";
+                        k = 1;
+                    }
+                    else
+                    {
+                        lcd.clear();
+                        lcd.home();
+                        lcd.print("Limite Atingido.");
+                        delay(3000);
+                        //timer();
+                        rfid_func();
             }
         }      
     }
@@ -384,3 +359,63 @@ void timer()
         while( i != 1);
     }
 }
+
+void rfid_func()
+{
+    if (!mfrc522.PICC_IsNewCardPresent()) 
+    {
+        return;
+    }
+    //Seleciona o cartão / tag
+    if (!mfrc522.PICC_ReadCardSerial()) 
+    {
+        return;
+    }
+    
+    String conteudo= "";
+    byte letra;
+
+     for (byte i = 0; i < mfrc522.uid.size; i++) 
+    {
+        Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        Serial.print(mfrc522.uid.uidByte[i], HEX);
+        conteudo.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+        conteudo.concat(String(mfrc522.uid.uidByte[i], HEX));
+    }
+  
+    boolean tagVerificada = false;
+  
+    lcd.clear();
+    lcd.home();
+    conteudo.toUpperCase();
+  
+    for(int indice =0; indice < sizeof(tagUID); indice++)
+    {
+        if (conteudo.substring(1) == tagUID[0]) //UID 1
+        {
+            lcd.print("Ola!");
+            lcd.setCursor(0,1);
+            lcd.println("Acesso Liberado!");
+    
+            //tag encontrada
+            tagVerificada = true;
+
+            delay(3000);   
+            setup();
+            conteudo= "";
+        }
+    }
+    
+    if((tagVerificada == false)&&(conteudo != ""))
+    {
+    
+        lcd.print("Usuario Negado!");
+        lcd.setCursor(0,1);
+        lcd.println("Acesso Negado!  ");
+    
+        delay(3000);  
+        setup();
+        conteudo= "";
+    }
+}
+
