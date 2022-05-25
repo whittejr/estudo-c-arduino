@@ -2,20 +2,19 @@
 
 int main(void)
 {
-    int i = 15;
+  int i = 15;
 
-    while (i >= 10)
+  while (i >= 10)
+  {
+    i--;
+    printf("%d", i);
+  }
+  if (i == 10)
+  {
+    do
     {
-        i--;
-        printf("%d", i);
-    }
-    if (i == 10)
-    {
-        do
-        {
-            i--;
-            printf("%d", i);
-        }
-        while (i != 0);
-    }
+      i--;
+      printf("%d", i);
+    } while (i != 0);
+  }
 }
