@@ -102,20 +102,20 @@ void loop()
         Serial.println(rfidCard);
         if (rfidCard == "122 25 172 21")
         {
-          lcd.clear();
-          lcd.setCursor(3, 0);
-          lcd.print("Bem Vindo!");
-          lcd.setCursor(3, 1);
-          lcd.print("Alessandro!");
-          digitalWrite(azul, HIGH);
-          tone(buzzer, 1500);   
-          delay(700);   
-          noTone(buzzer);
-          digitalWrite(azul, LOW);
-          rfidCard = "";
-          lcd.clear();
-          lcd.home();
-          rfidMode = true;
+            lcd.clear();
+            lcd.setCursor(3, 0);
+            lcd.print("Bem Vindo!");
+            lcd.setCursor(3, 1);
+            lcd.print("Alessandro!");
+            digitalWrite(azul, HIGH);
+            tone(buzzer, 1500);   
+            delay(700);   
+            noTone(buzzer);
+            digitalWrite(azul, LOW);
+            rfidCard = "";
+            lcd.clear();
+            lcd.home();
+            rfidMode = true;
         }
         else {
           lcd.clear();
