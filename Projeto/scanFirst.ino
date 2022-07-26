@@ -1,5 +1,5 @@
 #include <LiquidCrystal_I2C.h>
-#include <MFRC522.h>
+#include <RFID.h>
 #include <SPI.h>
 #include <Keypad.h>
 
@@ -12,8 +12,10 @@ const int buzzer = 6;
 // definições RFID
 #define RST_PIN 5
 #define SS_PIN 53
-MFRC522 mfrc522(SS_PIN, RST_PIN);
+RFID rfid(SS_PIN, RST_PIN);
 String tagUID = "7A 19 AC 15";
+String rfidCard;
+
 
 // senha
 String senha = "1234";
@@ -66,8 +68,9 @@ void entrarSenha();
 void setup()
 {
   Serial.begin(9600);
-  mfrc522.PCD_Init();
+  
   SPI.begin();
+  rfid.init();
 
   pinMode(buzzer, OUTPUT);
   pinMode(azul, OUTPUT);
@@ -90,68 +93,46 @@ void loop()
   
   while (rfidMode == false)
   {
-    if (!mfrc522.PICC_IsNewCardPresent()) 
+    if (rfid.isCard())
     {
-        return;
-    }
-    if (!mfrc522.PICC_ReadCardSerial()) 
-    {
-        Serial.println("Cartao encontrado");
-        return;
-    }
-    
-    String conteudo= "";
-    byte letra;
-
-     for (byte i = 0; i < mfrc522.uid.size; i++) 
-    {
-        Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-        Serial.print(mfrc522.uid.uidByte[i], HEX);
-        conteudo.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-        conteudo.concat(String(mfrc522.uid.uidByte[i], HEX));
-    }
-  
-    boolean tagVerificada = false;
-    
-    lcd.home();
-    conteudo.toUpperCase();
-  
-    for(int indice = 0; indice < sizeof(tagUID); indice++)
-    {
-        if (conteudo.substring(1) == tagUID)
+      if (rfid.readCardSerial())
+      {
+        rfidCard = String(rfid.serNum[0]) + " " + String(rfid.serNum[1]) + " " + String(rfid.serNum[2]) + " " + String(rfid.serNum[3]);
+        
+        Serial.println(rfidCard);
+        if (rfidCard == "122 25 172 21")
         {
-            tagVerificada = true;
-
-            lcd.clear();
-            lcd.setCursor(3, 0);
-            lcd.print("Bem Vindo!");
-            digitalWrite(azul, HIGH);
-            tone(buzzer, 1500);   
-            delay(700);   
-            noTone(buzzer);
-            digitalWrite(azul, LOW);
-            conteudo= "";
-            lcd.clear();
-            lcd.home();
-            rfidMode = true;
+          lcd.clear();
+          lcd.setCursor(3, 0);
+          lcd.print("Bem Vindo!");
+          lcd.setCursor(3, 1);
+          lcd.print("Alessandro!");
+          digitalWrite(azul, HIGH);
+          tone(buzzer, 1500);   
+          delay(700);   
+          noTone(buzzer);
+          digitalWrite(azul, LOW);
+          rfidCard = "";
+          lcd.clear();
+          lcd.home();
+          rfidMode = true;
         }
-    }
-    
-    if((tagVerificada == false)&&(conteudo != ""))
-    {    
-        lcd.clear();
-        lcd.print(" Acesso Negado ");
-        analogWrite(vermelho, 200);
-        tone(buzzer, 500);   
-        delay(700);
-        noTone(buzzer);
-        digitalWrite(vermelho, LOW);
-        lcd.clear();
-        conteudo = "";
-        loop();
+        else {
+          lcd.clear();
+          lcd.print(" Acesso Negado ");
+          analogWrite(vermelho, 200);
+          tone(buzzer, 500);   
+          delay(700);
+          noTone(buzzer);
+          digitalWrite(vermelho, LOW);
+          lcd.clear();
+          rfidCard = "";
+          loop();
+
+        }
+      }
     }
   }
-
   lcd.clear();
   menuMode = true;
   
